@@ -1,11 +1,14 @@
 import {
   CalendarDaysIcon,
   Squares2X2Icon,
-  MagnifyingGlassIcon,
+  MagnifyingGlassIcon
 } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import profile from "../assets/profile.png";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import Login from "../pages/Login";
+import Signup from "../pages/Signup";
+import PasswordRecover from "../pages/PasswordRecover";
 
 const Header = ({ onMenuItemChange, availableBalance }) => {
   const [name] = useState("Hwang Hyunjin");
@@ -32,6 +35,43 @@ const Header = ({ onMenuItemChange, availableBalance }) => {
   const handleMenuItemClick = (menuItemID) => {
     setSelected(menuItemID);
     onMenuItemChange(menuItemID);
+  };
+
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [loginPage, setLoginPage] = useState(false);
+  const [signupPage, setSignupPage] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
+
+  const handleAvatarClick = () => {
+    setIsPopupVisible(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
+  };
+
+  const handleLoginPage = () => {
+    setLoginPage(true);
+  };
+
+  const handleCloseLoginPage = () => {
+    setLoginPage(false);
+  };
+
+  const handleSignupPage = () => {
+    setSignupPage(true);
+  };
+
+  const handleCloseSignupPage = () => {
+    setSignupPage(false);
+  };
+
+  const handleForgotPassword = () => {
+    setForgotPassword(true);
+  };
+
+  const handleCloseForgotPassword = () => {
+    setForgotPassword(false);
   };
 
   return (
@@ -82,7 +122,13 @@ const Header = ({ onMenuItemChange, availableBalance }) => {
         </div>
 
         {/* Avatar */}
-        <div className="avatar">
+        <button
+          className="avatar"
+          onClick={() => {
+            handleAvatarClick();
+            handleLoginPage();
+          }}
+        >
           <div className="w-16 h-16 rounded-full overflow-hidden">
             <img
               className="object-cover w-full h-full"
@@ -90,8 +136,30 @@ const Header = ({ onMenuItemChange, availableBalance }) => {
               alt="User Avatar"
             />
           </div>
-        </div>
+        </button>
       </div>
+
+      {isPopupVisible && loginPage && (
+        <Login
+          handleClosePopup={handleClosePopup}
+          handleCloseLoginPage={handleCloseLoginPage}
+          handleSignupPage={handleSignupPage}
+          handleForgotPassword={handleForgotPassword}
+        />
+      )}
+
+      {isPopupVisible && signupPage && (
+        <Signup
+          handleClosePopup={handleClosePopup}
+          handleCloseSignupPage={handleCloseSignupPage}
+          handleLoginPage={handleLoginPage}
+          handleForgotPassword={handleForgotPassword}
+        />
+      )}
+
+      {isPopupVisible && forgotPassword && (
+        <PasswordRecover handleClosePopup={handleClosePopup} handleCloseForgotPassword={handleCloseForgotPassword} />
+      )}
     </div>
   );
 };
